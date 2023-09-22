@@ -1,0 +1,70 @@
+import math
+from scipy.stats import norm
+import pandas as pd
+import numpy as np
+
+
+'''
+C: call option price
+S:is the current stock price
+X:is the strike price
+T:is the time to expiration
+r:is the risk-free interest rate
+'''
+
+
+
+
+def implied_volatility(C_market, S, X, T, r, C_tol=0.001):
+    def error_function(sigma):
+        return bsm_theoretical_price(S, X, T, r, sigma) - C_market
+
+    implied_volatility = 0.2  # Initial guess
+    max_iterations = 1000
+    tolerance = 1e-4
+
+    for _ in range(max_iterations):
+        error = error_function(implied_volatility)
+        if abs(error) < C_tol:
+            return implied_volatility
+        vega = S * np.sqrt(T) * norm.pdf((np.log(S / X) + (r + (implied_volatility ** 2) / 2) * T) / (implied_volatility * np.sqrt(T)))
+        implied_volatility -= error / vega
+        if abs(error) < tolerance:
+            return implied_volatility
+
+
+'''
+    S: Current stock price
+    K: Strike price
+    T: Time to expiration (in years)
+    r: Risk-free interest rate
+    sigma: Volatility
+'''
+def bsm_theoretical_price(S, K, T, r, sigma):
+
+  d1 = (math.log(S / K) + (r + (sigma ** 2) / 2) * T) / (sigma * math.sqrt(T))
+  d2 = d1 - sigma * math.sqrt(T)
+
+  theoretical_call_option_price = S * norm.cdf(d1) - K * math.exp(-r * T) * norm.cdf(d2)
+  return theoretical_call_option_price
+
+def check_arbitrage(theoretical_call_option_price, actual_call_option_price):
+  if theoretical_call_option_price >  1.1 * actual_call_option_price:
+    return 'buy'
+  elif theoretical_call_option_price <  1.1 * actual_call_option_price:
+    return 'sell'
+  else:
+    return 'do nothing'
+
+
+
+
+
+option_data = pd.read_csv('aug 20 option data.csv')
+option_data['ImpliedVolatility'] = option_data.apply(lambda row: implied_volatility(row['Last'], row['UnderlyingPrice'], row['Strike'], row['ExpTime'], row['RiskFreeInterest']), axis=1)
+
+
+calls = option_data.loc[option_data['Type'] == 'call']
+calls['theoretical'] = calls.apply(lambda row: bsm_theoretical_price(row['UnderlyingPrice'], row['Strike'], row['ExpTime'], row['RiskFreeInterest'], row['Volatility']), axis=1)
+calls['check arb'] = calls.apply(lambda row: check_arbitrage(row['theoretical'], row['Last']), axis=1)
+
