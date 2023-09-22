@@ -1,5 +1,5 @@
 # Using-derivatives-to-find-trading-opportunities
-Finding Historical Arbitrage Opportunities with Financial Derivatives
+Finding Trading Opportunities in Python using Financial Derivatives
 
 
 **Intro**
