@@ -1,4 +1,4 @@
-# Using-derivatives-to-find-arb-opportunities
+# Using-derivatives-to-find-trading-opportunities
 Finding Historical Arbitrage Opportunities with Financial Derivatives
 
 
