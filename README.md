@@ -3,7 +3,7 @@ Finding Historical Arbitrage Opportunities with Financial Derivatives
 
 
 **Intro**
-Using the Black-Scholes model, the theoretical value of derivatives such as a call option can be estimated. Oftentimes, the theoretical value differs greatly from the actual trading price of that option. In these cases, an arbitrage opporunty arrises, in which profits can be made by buying an undervalued option or selling an overvalued option. The intuition lies in that the actual trading price of an option will soon get closer to the estimated theoretical value in the future.
+Using the Black-Scholes model, the theoretical value of derivatives such as a call option can be estimated. Oftentimes, the theoretical value differs greatly from the actual trading price of that option. In these cases, an arbitrage opporunty arrises, in which profits can be made by buying an undervalued option while simultaneously selling an overvalued option. The intuition lies in that the actual trading price of an option will soon get closer to the estimated theoretical value in the future.
 
 
 **Methods**
